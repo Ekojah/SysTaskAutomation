@@ -1,0 +1,7 @@
+Filesystem           Size  Used Avail Use% Mounted on
+devtmpfs             4.0M     0  4.0M   0% /dev
+tmpfs                888M     0  888M   0% /dev/shm
+tmpfs                355M  6.5M  349M   2% /run
+/dev/mapper/cs-root   17G  4.9G   13G  29% /
+/dev/sda1            960M  346M  615M  37% /boot
+tmpfs                178M  108K  178M   1% /run/user/1000
