@@ -10,25 +10,28 @@ SUBJECT="Backup and Update Report - $DATE"
 BODY="Please find attached the backup and update report for $DATE."
 
 # Create the zip file with backup and log files
-zip -r "$ZIP_FILE" "$BACKUP_DIR/$DATE" "$LOG_DIR/update-$DATE.txt"
+zip -r "$ZIP_FILE" "$LOG_DIR" "$BACKUP_DIR"
 
-# Check if the zip command was successful
-if [ $? -eq 0 ]; then
-    echo "Files zipped successfully: $ZIP_FILE"
-else
-    echo "Failed to zip files"
-    exit 1
-fi
+# Create and send the email
+sendmail -v -t <<EOF
+To: $EMAILS
+Subject: $SUBJECT
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="boundary"
 
-# Send the email with the zip file attached to multiple recipients
-echo "$BODY" | mutt -a "$ZIP_FILE" -s "$SUBJECT" -- $EMAILS
+--boundary
+Content-Type: text/plain
 
-# Check if the email was sent successfully
-if [ $? -eq 0 ]; then
-    echo "Email sent successfully to $EMAILS"
-else
-    echo "Failed to send email"
-    exit 1
-fi
+$BODY
+
+--boundary
+Content-Type: application/zip; name="$(basename $ZIP_FILE)"
+Content-Disposition: attachment; filename="$(basename $ZIP_FILE)"
+Content-Transfer-Encoding: base64
+
+$(base64 "$ZIP_FILE")
+
+--boundary--
+EOF
 
 
