@@ -10,10 +10,23 @@ BODY="Please find attached the backup and update report for $DATE."
 
 zip -r "$ZIP_FILE" "$LOG_DIR" "$BACKUP_DIR"
 
-sendmail -v -t << EOF
+sendmail -v -t <<EOF
 To: $EMAILS
 Subject: $SUBJECT
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="boundary"
+ 
+--boundary
+Content-Type: text/plain
+ 
 $BODY
-
-Attachments: $ZIP_FILE
+ 
+--boundary
+Content-Type: application/zip; name="$(basename $ZIP_FILE)"
+Content-Disposition: attachment; filename="$(basename $ZIP_FILE)"
+Content-Transfer-Encoding: base64
+ 
+$(base64 "$ZIP_FILE")
+ 
+--boundary--
 EOF
