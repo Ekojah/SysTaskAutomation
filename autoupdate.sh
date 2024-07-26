@@ -2,11 +2,8 @@ Services/backup.sh
 
 Services/update.sh
 
+Services/send_report.sh
 
-# find the newest update .txt
+# 0 */8 * * * /home/eko/AutomationTool/autoupdate.sh    
+# cron code not actually executed (for practicality) 
 
-# find and zip the newest backup directory
-
-# send both files as an email
-
-# scheduele this to occur automatically in this exact order every ___
